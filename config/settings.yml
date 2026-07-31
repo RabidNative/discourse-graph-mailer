@@ -1,0 +1,24 @@
+plugins:
+  graph_mailer_enabled:
+    default: true
+    client: true
+
+  graph_mailer_tenant_id:
+    default: ""
+    client: false
+
+  graph_mailer_client_id:
+    default: ""
+    client: false
+
+  graph_mailer_client_secret:
+    default: ""
+    client: false
+
+  graph_mailer_from_address:
+    default: "Forums@sporetransit.net"
+    client: false
+
+  graph_mailer_user_principal_name:
+    default: "bryanmartin@sporetransit.net"
+    client: false
