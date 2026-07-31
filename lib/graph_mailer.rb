@@ -73,8 +73,8 @@ class GraphMailer
     message = {
       "subject" => mail.subject,
       "body" => {
-        "contentType" => "html",
-        "content" => body_html
+        "contentType" => "html" : "text",
+        "content" => body_html || body_text
       },
       "from" => {
         "emailAddress" => {
