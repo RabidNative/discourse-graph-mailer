@@ -16,12 +16,12 @@ after_initialize do
     class Sender
       alias_method :smtp_send, :send
 
-      def send
+      def send(message, opts = {})
         if SiteSetting.graph_mailer_enabled
-          GraphMailer.send_via_graph(@mail)
-          @mail 
+          GraphMailer.send_via_graph(message)
+          message
         else
-          smtp_send
+          smtp_send(message, opts)
         end
       end
     end
