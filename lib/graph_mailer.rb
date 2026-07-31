@@ -70,26 +70,27 @@ class GraphMailer
     body_html = mail.html_part&.body&.decoded || mail.body.decoded
     body_text = mail.text_part&.body&.decoded
 
-    message = {
-      "subject" => mail.subject,
-      "body" => {
-        "contentType" => "html" : "text",
-        "content" => body_html || body_text
-      },
-      "from" => {
+  message = {
+    "subject" => mail.subject,
+    "body" => {
+      "contentType" => body_html ? "html" : "text",
+      "content" => body_html || body_text
+    },
+    "from" => {
+      "emailAddress" => {
+        "address" => SiteSetting.graph_mailer_from_address
+      }
+    },
+    "replyTo" => [
+      {
         "emailAddress" => {
           "address" => SiteSetting.graph_mailer_from_address
         }
-      },
-      "replyTo" => [
-        {
-          "emailAddress" => {
-            "address" => SiteSetting.graph_mailer_from_address
-          }
-        }
-      ],
-      "toRecipients" => to_recipients
-    }
+      }
+    ],
+    "toRecipients" => to_recipients
+  }
+
 
     message["ccRecipients"] = cc_recipients if cc_recipients.any?
     message["bccRecipients"] = bcc_recipients if bcc_recipients.any?
