@@ -19,6 +19,7 @@ after_initialize do
       def send
         if SiteSetting.graph_mailer_enabled
           GraphMailer.send_via_graph(@mail)
+          @mail 
         else
           smtp_send
         end
