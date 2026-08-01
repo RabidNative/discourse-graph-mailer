@@ -28,11 +28,13 @@ plugins:
     type: text
 
   graph_mailer_send_test:
+    default: ""
     type: button
     label: "Send Test Email"
     action: "graph-mailer/test-email"
 
   graph_mailer_validate:
+    default: ""
     type: button
     label: "Validate Credentials"
     action: "graph-mailer/validate"
