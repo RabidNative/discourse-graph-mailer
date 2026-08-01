@@ -22,3 +22,17 @@ plugins:
   graph_mailer_user_principal_name:
     default: "bryanmartin@sporetransit.net"
     client: false
+
+  graph_mailer_test_address:
+    default: "rabidnative@outlook.com"
+    type: text
+
+  graph_mailer_send_test:
+    type: button
+    label: "Send Test Email"
+    action: "graph-mailer/test-email"
+
+  graph_mailer_validate:
+    type: button
+    label: "Validate Credentials"
+    action: "graph-mailer/validate"

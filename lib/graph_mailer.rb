@@ -99,5 +99,22 @@ class GraphMailer
       "message" => message,
       "saveToSentItems" => false
     }
+
+  def self.fetch_token
+    tenant = SiteSetting.graph_mailer_tenant_id
+    client = SiteSetting.graph_mailer_client_id
+    secret = SiteSetting.graph_mailer_client_secret
+
+    url = "https://login.microsoftonline.com/#{tenant}?oauth2/v2.0/token"
+
+    resp = Net::HTTP.post_form(
+      URI(url),
+      {
+        'client_id' => client,
+        'client_secret' => secret,
+        'scope' => 'https://graph.microsoft.com/.default',
+        'grant_type' => 'client_credentials'
+      }
+    )
   end
 end
