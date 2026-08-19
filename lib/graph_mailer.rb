@@ -56,65 +56,47 @@ class GraphMailer
 
   def self.build_payload(mail)
     to_recipients = Array(mail.to).map do |addr|
-      { "emailAddress" => { "address" => addr } }
+      { 'emailAddress' => { 'address' => addr } }
     end
 
     cc_recipients = Array(mail.cc).map do |addr|
-      { "emailAddress" => { "address" => addr } }
+      { 'emailAddress' => { 'address' => addr } }
     end
 
     bcc_recipients = Array(mail.bcc).map do |addr|
-      { "emailAddress" => { "address" => addr } }
+      { 'emailAddress' => { 'address' => addr } }
     end
 
-    body_html = mail.html_part&.body&.decoded || mail.body.decoded
+    body_html = mail.html_part&.body&.decoded || mail.body&.decoded
     body_text = mail.text_part&.body&.decoded
 
-  message = {
-    "subject" => mail.subject,
-    "body" => {
-      "contentType" => body_html ? "html" : "text",
-      "content" => body_html || body_text
-    },
-    "from" => {
-      "emailAddress" => {
-        "address" => SiteSetting.graph_mailer_from_address
-      }
-    },
-    "replyTo" => [
-      {
-        "emailAddress" => {
-          "address" => SiteSetting.graph_mailer_from_address
+    message = {
+      'subject' => mail.subject,
+      'body' => {
+        'contentType' => body_html.present? ? 'html' : 'text',
+        'content' => body_html || body_text
+      },
+      'from' => {
+        'emailAddress' => {
+          'address' => SiteSetting.graph_mailer_from_address
         }
-      }
-    ],
-    "toRecipients" => to_recipients
-  }
-
-
-    message["ccRecipients"] = cc_recipients if cc_recipients.any?
-    message["bccRecipients"] = bcc_recipients if bcc_recipients.any?
-
-    {
-      "message" => message,
-      "saveToSentItems" => false
+      },
+      'replyTo' => [
+        {
+          'emailAddress' => {
+            'address' => SiteSetting.graph_mailer_from_address
+          }
+        }
+      ],
+      'toRecipients' => to_recipients
     }
 
-  def self.fetch_token
-    tenant = SiteSetting.graph_mailer_tenant_id
-    client = SiteSetting.graph_mailer_client_id
-    secret = SiteSetting.graph_mailer_client_secret
+    message['ccRecipients'] = cc_recipients if cc_recipients.any?
+    message['bccRecipients'] = bcc_recipients if bcc_recipients.any?
 
-    url = "https://login.microsoftonline.com/#{tenant}?oauth2/v2.0/token"
-
-    resp = Net::HTTP.post_form(
-      URI(url),
-      {
-        'client_id' => client,
-        'client_secret' => secret,
-        'scope' => 'https://graph.microsoft.com/.default',
-        'grant_type' => 'client_credentials'
-      }
-    )
+    {
+      'message' => message,
+      'saveToSentItems' => false
+    }
   end
 end

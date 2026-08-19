@@ -17,13 +17,14 @@ after_initialize do
       alias_method :smtp_send, :send
 
       def send(*args)
-        #if Discourse calls send() with no arguements it will fall back to the original behavior
         return smtp_send(*args) if args.empty?
-        
-        message = args[0]
-        opts    = args[1] || {}
 
-        if SiteSetting.graph_mailer_enabled
+        message = args[0]
+
+        if SiteSetting.graph_mailer_enabled &&
+             SiteSetting.graph_mailer_tenant_id.present? &&
+             SiteSetting.graph_mailer_client_id.present? &&
+             SiteSetting.graph_mailer_client_secret.present?
           GraphMailer.send_via_graph(message)
           message
         else
